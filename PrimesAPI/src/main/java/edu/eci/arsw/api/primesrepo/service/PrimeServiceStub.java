@@ -4,6 +4,8 @@ import edu.eci.arsw.api.primesrepo.model.FoundPrime;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,9 +20,18 @@ public class PrimeServiceStub implements PrimeService
     
     
     @Override
-    public void addFoundPrime( FoundPrime foundPrime )
-    {
-        primes.add(foundPrime);
+    public void addFoundPrime( FoundPrime foundPrime ){
+    boolean possible = true;
+        for(FoundPrime fp: primes){
+            if(fp.getPrime() == foundPrime.getPrime()){
+                possible = false;
+            }
+        }
+        if(possible){
+            primes.add(foundPrime);
+        }else{
+            Logger.getLogger(PrimeServiceStub.class.getName()).log(Level.SEVERE, null, "No se puede agregar un numero primo que ya haya sido registrado");
+        }
     }
 
     @Override
@@ -31,16 +42,20 @@ public class PrimeServiceStub implements PrimeService
     }
 
     @Override
-    public FoundPrime getPrime( String prime )
-    {
-    FoundPrime fp = null;
-        //TODO
-        for (int i=0; i < primes.size(); i++){
-            if (prime  == primes.get(i).getPrime()){
-                fp = primes.get(i);
+    public FoundPrime getPrime( String prime )    {
+        FoundPrime found =  new FoundPrime();
+        try{            
+            for(FoundPrime fp: primes){
+                if(fp.getPrime().equals(prime)){
+                    found = fp;
+                }
+
             }
+        }catch(Exception e){
+            Logger.getLogger(PrimeServiceStub.class.getName()).log(Level.SEVERE, null, "El numero primo a consultar no existe");
         }
-        return fp;
+        return found;
+        
     }
     
 }

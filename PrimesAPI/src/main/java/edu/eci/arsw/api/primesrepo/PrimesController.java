@@ -55,18 +55,11 @@ public class PrimesController
         }        
     }
     
-    @GetMapping("/primes/{primenumber}")
-    public ResponseEntity<?> getPrimeNumber(@PathVariable String primenumber) {
-        try {
-            return new ResponseEntity<>(primeService.getPrime(primenumber), HttpStatus.ACCEPTED);
-        } catch (Exception ex) {
-            Logger.getLogger(PrimesController.class.getName()).log(Level.SEVERE, null, ex);
-            return new ResponseEntity<>("Error FORBIDDEN",HttpStatus.FORBIDDEN);
-        }
-
-
+    @RequestMapping( value = "/primes/{primenumber}", method = RequestMethod.GET )
+    public FoundPrime getPrime(String primenumber){
+        System.out.println("Consulta un numero primo");
+        return primeService.getPrime(primenumber);
     }
-
 
 
 }
